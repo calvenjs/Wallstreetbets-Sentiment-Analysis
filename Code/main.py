@@ -67,7 +67,7 @@ validSubmissions = submissionsWithin24hours(subreddit)
 for submission in validSubmissions:
    ticker = ""
    for j in range (len(stockCode_df)):
-      tempList = submission.strip("$").split()
+        tempList = submission.replace('$', '').split()
       stockcode = stockCode_df['Code'].iloc[[j]].to_string(index=False).strip()
       if any(word == stockcode for word in tempList ):
          ticker += stockcode
