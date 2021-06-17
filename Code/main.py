@@ -20,10 +20,10 @@ from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 from nltk.corpus import stopwords
 import nltk
 import matplotlib.pyplot as plt
-import os
 
-id_ = 
-secret = 
+
+id_ = ''
+secret = ''
 user = 'WebScraping'
 
 def comp_score(text):
@@ -55,26 +55,14 @@ def submissionsWithin24hours(subreddit):
 
     return submissionsLast24
 
-directory = os.getcwd()
-stockCode_df = pd.read_csv(directory+r'\data\All_Listed_Stock.csv')
 
 wsb_df = pd.DataFrame()
 wsb_df['Post'] = ""
-wsb_df['Tick'] = ""
 
 subreddit = "wallstreetbets"
 validSubmissions = submissionsWithin24hours(subreddit)
 for submission in validSubmissions:
-   ticker = ""
-   for j in range (len(stockCode_df)):
-        tempList = submission.replace('$', '').split()
-      stockcode = stockCode_df['Code'].iloc[[j]].to_string(index=False).strip()
-      if any(word == stockcode for word in tempList ):
-         ticker += stockcode
-         ticker += ","
-    appendDF = pd.DataFrame({"Post":[submission],
-                             "Tick":[ticker]
-                             })
+    appendDF = pd.DataFrame({"Post":[submission]})
     wsb_df = wsb_df.append(appendDF , ignore_index = True)
 
 print("Outputing to csv...")
