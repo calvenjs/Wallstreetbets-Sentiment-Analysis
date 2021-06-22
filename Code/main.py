@@ -20,8 +20,11 @@ from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 from nltk.corpus import stopwords
 import nltk
 import matplotlib.pyplot as plt
-import os
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4c714e58e516843d010edfd62a25bc17784c52aa
 id_ = ''
 secret = ''
 user = 'WebScraping'
@@ -58,21 +61,26 @@ def submissionsWithin24hours(subreddit):
 
     return selfText24, submissionsLast24
 
-directory = os.getcwd()
-stockCode_df = pd.read_csv(directory+r'\data\All_Listed_Stock.csv')
 
 wsb_df = pd.DataFrame()
 wsb_df['Post'] = ""
+<<<<<<< HEAD
 wsb_df['Body'] = ""
+=======
+>>>>>>> 4c714e58e516843d010edfd62a25bc17784c52aa
 
 subreddit = "wallstreetbets"
 body, validSubmissions = submissionsWithin24hours(subreddit)
 i = 0
 for submission in validSubmissions:
+<<<<<<< HEAD
     appendDF = pd.DataFrame({"Post":[submission],
                              "Body":[body[i]],
                             })
     i+=1
+=======
+    appendDF = pd.DataFrame({"Post":[submission]})
+>>>>>>> 4c714e58e516843d010edfd62a25bc17784c52aa
     wsb_df = wsb_df.append(appendDF , ignore_index = True)
 
 print("Outputing to csv...")
