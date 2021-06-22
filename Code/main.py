@@ -22,8 +22,8 @@ import nltk
 import matplotlib.pyplot as plt
 import os
 
-id_ = 
-secret = 
+id_ = ''
+secret = ''
 user = 'WebScraping'
 
 def comp_score(text):
@@ -36,6 +36,7 @@ def submissionsWithin24hours(subreddit):
     subreddit = reddit.subreddit(subreddit)
 
     submissionsLast24 = []
+    selfText24 = []
     for submission in subreddit.new(limit=10000): 
         utcPostTime = submission.created
         submissionDate = datetime.utcfromtimestamp(utcPostTime)
@@ -48,33 +49,30 @@ def submissionsWithin24hours(subreddit):
 
         title = submission.title
         link = 'www.reddit.com' + submission.permalink
+        body = submission.selftext
         submissionDelta = str(submissionDelta)
 
         if 'day' not in submissionDelta:
             submissionsLast24.append(title)
+            selfText24.append(body)
 
-    return submissionsLast24
+    return selfText24, submissionsLast24
 
 directory = os.getcwd()
 stockCode_df = pd.read_csv(directory+r'\data\All_Listed_Stock.csv')
 
 wsb_df = pd.DataFrame()
 wsb_df['Post'] = ""
-wsb_df['Tick'] = ""
+wsb_df['Body'] = ""
 
 subreddit = "wallstreetbets"
-validSubmissions = submissionsWithin24hours(subreddit)
+body, validSubmissions = submissionsWithin24hours(subreddit)
+i = 0
 for submission in validSubmissions:
-   ticker = ""
-   for j in range (len(stockCode_df)):
-        tempList = submission.replace('$', '').split()
-      stockcode = stockCode_df['Code'].iloc[[j]].to_string(index=False).strip()
-      if any(word == stockcode for word in tempList ):
-         ticker += stockcode
-         ticker += ","
     appendDF = pd.DataFrame({"Post":[submission],
-                             "Tick":[ticker]
-                             })
+                             "Body":[body[i]],
+                            })
+    i+=1
     wsb_df = wsb_df.append(appendDF , ignore_index = True)
 
 print("Outputing to csv...")
