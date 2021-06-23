@@ -105,8 +105,8 @@ plt.show()
 # Get tickers
 tickers = set()
 outlook_dict = {}
-negative = ['put','short','down','sell','drop','fall','lose','bear','out','bad','mistake']
-positive = ['call','long','up','buy','bull','in','good','hold','hodl','love','yolo','all in','discount','moon']
+negative = ['put','down','sell','drop','fall','lose','bear','out','bad','mistake','useless']
+positive = ['call','long','up','buy','bull','in','good','hold','hodl','love','yolo','all in','discount','moon','squeeze']
 black_list= ['DD','APE','POOR','CEO','LAST','IT','IN','BUY','FED','USA','SEC','MY','PR','JUST','ALL','THIS','THE','LOOKS','LIKE','ART','HOMO','BET','FOMO','WSB','MOON','LAMBO','HF', 'LOL', 'I', 'SEE', 'BRRR','BRR','STOP', 'YOLO', 'TIL', 'EDIT', 'OTM', 'GOT', 'IPO', 'WTF', 'A', 'ATH','FUCK','BUT','UP','COVID']
 
 for i in range(0, len(wsb_df)):
