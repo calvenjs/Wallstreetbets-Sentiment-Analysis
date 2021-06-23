@@ -7,19 +7,20 @@ Created on Fri Jun 11 16:08:44 2021
 
 import praw
 from psaw import PushshiftAPI
-import pandas as pd 
-import time
+import pandas as pd
+pd.options.mode.chained_assignment = None
 from datetime import datetime
-from datetime import datetime, timedelta
+import datetime as dt
 import numpy as np
 import requests
 from bs4 import BeautifulSoup
-import pandas as pd
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
-from nltk.corpus import stopwords
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import nltk
 import matplotlib.pyplot as plt
+import re
+import yfinance as yf
+
 
 id_ = ''
 secret = ''
@@ -38,10 +39,10 @@ def submissionsWithin24hours(subreddit):
     selfText24 = []
     for submission in subreddit.new(limit=10000): 
         utcPostTime = submission.created
-        submissionDate = datetime.utcfromtimestamp(utcPostTime)
+        submissionDate = dt.utcfromtimestamp(utcPostTime)
         submissionDateTuple = submissionDate.timetuple()
 
-        currentTime = datetime.utcnow()
+        currentTime = dt.utcnow()
 
         #How long ago it was posted.
         submissionDelta = currentTime - submissionDate
@@ -61,6 +62,8 @@ def submissionsWithin24hours(subreddit):
 wsb_df = pd.DataFrame()
 wsb_df['Post'] = ""
 wsb_df['Body'] = ""
+wsb_df["Ticker"] = ""
+wsb_df['Sentiment Score'] = 0
 
 
 subreddit = "wallstreetbets"
@@ -92,10 +95,56 @@ print ("There are {} words in the title on r/wsbets.".format(len(text)))
 # Create stopword list
 stop_words = set(STOPWORDS)
 stop_words.update(nltk.corpus.stopwords.words('english'))
-
-    
+# Word Cloud
 wordcloud = WordCloud(stopwords=stop_words, background_color="yellow", max_words = 40).generate(text)
 plt.figure(figsize=(10,6))
 plt.imshow(wordcloud, interpolation='bilinear')
 plt.axis("off")
 plt.show()
+
+# Get tickers
+tickers = set()
+outlook_dict = {}
+negative = ['put','short','down','sell','drop','fall','lose','bear','out','bad','mistake']
+positive = ['call','long','up','buy','bull','in','good','hold','hodl','love','yolo','all in','discount','moon']
+black_list= ['DD','APE','POOR','CEO','LAST','IT','IN','BUY','FED','USA','SEC','MY','PR','JUST','ALL','THIS','THE','LOOKS','LIKE','ART','HOMO','BET','FOMO','WSB','MOON','LAMBO','HF', 'LOL', 'I', 'SEE', 'BRRR','BRR','STOP', 'YOLO', 'TIL', 'EDIT', 'OTM', 'GOT', 'IPO', 'WTF', 'A', 'ATH','FUCK','BUT','UP','COVID']
+
+for i in range(0, len(wsb_df)):
+    temp = re.findall("(?:(?<=\A)|(?<=\s)|(?<=[$]))([A-Z]{1,5})(?=\s|$|[^a-zA-z])", wsb_df["Post"][i])
+    tickerFound = ""
+    for word in temp:
+        for negword in negative:
+            if negword in wsb_df["Post"][i].lower():
+                wsb_df["Sentiment Score"][i] += -5
+        for posword in positive:
+            if posword in wsb_df["Post"][i].lower():
+                wsb_df["Sentiment Score"][i] += 5
+        if word in black_list:
+            temp.remove(word)
+            #print('Removing ' + word)
+        else:
+            ticker = word
+            tickerObj = yf.Ticker(ticker)
+            try:
+                if tickerObj.info['symbol'] == ticker:
+                    print("Matching ticker found for " + ticker)
+                    tickers.add(ticker)
+                    if tickerFound !=  "":
+                        tickerFound += ","
+                    tickerFound += ticker
+            except:
+                print("No such ticker for " + ticker)
+                continue
+            
+    wsb_df["Ticker"][i] = tickerFound
+    
+    
+
+
+# Get stock Adjusted close
+start = dt.datetime.today()-dt.timedelta(100)
+end = dt.datetime.today()
+cl_price = pd.DataFrame()
+
+for ticker in tickers:
+    cl_price[ticker] = yf.download(ticker, start, end )["Adj Close"]
