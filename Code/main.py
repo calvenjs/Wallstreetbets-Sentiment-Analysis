@@ -9,8 +9,8 @@ import praw
 from psaw import PushshiftAPI
 import pandas as pd
 pd.options.mode.chained_assignment = None
-from datetime import datetime
-import datetime as dt
+from datetime import timedelta
+import datetime
 import numpy as np
 import requests
 from bs4 import BeautifulSoup
@@ -22,8 +22,8 @@ import re
 import yfinance as yf
 
 
-id_ = ''
-secret = ''
+id_ = 
+secret = 
 user = 'WebScraping'
 
 def comp_score(text):
@@ -39,10 +39,10 @@ def submissionsWithin24hours(subreddit):
     selfText24 = []
     for submission in subreddit.new(limit=10000): 
         utcPostTime = submission.created
-        submissionDate = dt.utcfromtimestamp(utcPostTime)
+        submissionDate = datetime.datetime.utcfromtimestamp(utcPostTime)
         submissionDateTuple = submissionDate.timetuple()
 
-        currentTime = dt.utcnow()
+        currentTime = datetime.datetime.utcnow()
 
         #How long ago it was posted.
         submissionDelta = currentTime - submissionDate
@@ -109,6 +109,8 @@ negative = ['put','short','down','sell','drop','fall','lose','bear','out','bad',
 positive = ['call','long','up','buy','bull','in','good','hold','hodl','love','yolo','all in','discount','moon']
 black_list= ['DD','APE','POOR','CEO','LAST','IT','IN','BUY','FED','USA','SEC','MY','PR','JUST','ALL','THIS','THE','LOOKS','LIKE','ART','HOMO','BET','FOMO','WSB','MOON','LAMBO','HF', 'LOL', 'I', 'SEE', 'BRRR','BRR','STOP', 'YOLO', 'TIL', 'EDIT', 'OTM', 'GOT', 'IPO', 'WTF', 'A', 'ATH','FUCK','BUT','UP','COVID']
 
+dict_freq = {}
+
 for i in range(0, len(wsb_df)):
     temp = re.findall("(?:(?<=\A)|(?<=\s)|(?<=[$]))([A-Z]{1,5})(?=\s|$|[^a-zA-z])", wsb_df["Post"][i])
     tickerFound = ""
@@ -128,22 +130,24 @@ for i in range(0, len(wsb_df)):
             try:
                 if tickerObj.info['symbol'] == ticker:
                     print("Matching ticker found for " + ticker)
-                    tickers.add(ticker)
-                    if tickerFound !=  "":
-                        tickerFound += ","
-                    tickerFound += ticker
+                  if ticker in dict_freq:
+                     dict_freq[ticker] +=1
+                  else:
+                     dict_freq[ticker] = 1
+                  tickers.add(ticker)
+                  if tickerFound !=  "":
+                     tickerFound += ","
+                     tickerFound += ticker
             except:
                 print("No such ticker for " + ticker)
                 continue
             
     wsb_df["Ticker"][i] = tickerFound
     
-    
-
 
 # Get stock Adjusted close
-start = dt.datetime.today()-dt.timedelta(100)
-end = dt.datetime.today()
+start = datetime.datetime.today()-datetime.timedelta(100)
+end =  datetime.datetime.today()
 cl_price = pd.DataFrame()
 
 for ticker in tickers:
