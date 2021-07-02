@@ -22,7 +22,7 @@ import re
 import yfinance as yf
 
 
-id_ = 
+id_ =  
 secret = 
 user = 'WebScraping'
 
@@ -64,7 +64,7 @@ wsb_df['Post'] = ""
 wsb_df['Body'] = ""
 wsb_df["Ticker"] = ""
 wsb_df['Sentiment Score'] = 0
-
+pd.set_option('display.max_columns', None)
 
 subreddit = "wallstreetbets"
 body, validSubmissions = submissionsWithin24hours(subreddit)
@@ -72,6 +72,8 @@ i = 0
 for submission in validSubmissions:
     appendDF = pd.DataFrame({"Post":[submission],
                              "Body":[body[i]],
+                             "Ticker":[""],
+                             'Sentiment Score':[0]
                             })
     i+=1
     wsb_df = wsb_df.append(appendDF , ignore_index = True)
@@ -113,6 +115,7 @@ dict_freq = pd.DataFrame()
 dict_freq['Name'] = ""
 dict_freq['Frequency'] = ""
 
+
 for i in range(0, len(wsb_df)):
    temp = re.findall("(?:(?<=\A)|(?<=\s)|(?<=[$]))([A-Z]{1,5})(?=\s|$|[^a-zA-z])", wsb_df["Post"][i])
    tickerFound = ""
@@ -123,6 +126,7 @@ for i in range(0, len(wsb_df)):
       for posword in positive:
          if posword in wsb_df["Post"][i].lower():
             wsb_df["Sentiment Score"][i] += 5
+
       if word in black_list:
          temp.remove(word)
          #print('Removing ' + word)
@@ -131,7 +135,7 @@ for i in range(0, len(wsb_df)):
          tickerObj = yf.Ticker(ticker)
          try:
             if tickerObj.info['symbol'] == ticker:
-               print("Matching ticker found for " + ticker)
+               #print("Matching ticker found for " + ticker)
                if ticker in dict_freq.Name.values:
                   dict_freq.loc[(dict_freq.Name == ticker), 'Frequency'] =  dict_freq.loc[(dict_freq.Name == ticker), 'Frequency'] + 1
                else:
@@ -139,12 +143,13 @@ for i in range(0, len(wsb_df)):
                tickers.add(ticker)
                if tickerFound !=  "":
                   tickerFound += ","
-                  tickerFound += ticker
+               tickerFound += ticker
          except:
-            print("No such ticker for " + ticker)
+            #print("No such ticker for " + ticker)
             continue  
-   wsb_df["Ticker"][i] = tickerFound
-    
+      wsb_df["Ticker"][i] = tickerFound
+      
+
 
 # Get stock Adjusted close
 start = datetime.datetime.today()-datetime.timedelta(100)
