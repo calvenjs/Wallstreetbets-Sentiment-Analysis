@@ -109,46 +109,53 @@ negative = ['put','down','sell','drop','fall','lose','bear','out','bad','mistake
 positive = ['call','long','up','buy','bull','in','good','hold','hodl','love','yolo','all in','discount','moon','squeeze']
 black_list= ['DD','APE','POOR','CEO','LAST','IT','IN','BUY','FED','USA','SEC','MY','PR','JUST','ALL','THIS','THE','LOOKS','LIKE','ART','HOMO','BET','FOMO','WSB','MOON','LAMBO','HF', 'LOL', 'I', 'SEE', 'BRRR','BRR','STOP', 'YOLO', 'TIL', 'EDIT', 'OTM', 'GOT', 'IPO', 'WTF', 'A', 'ATH','FUCK','BUT','UP','COVID']
 
-dict_freq = {}
+dict_freq = pd.DataFrame()
+dict_freq['Name'] = ""
+dict_freq['Frequency'] = ""
 
 for i in range(0, len(wsb_df)):
-    temp = re.findall("(?:(?<=\A)|(?<=\s)|(?<=[$]))([A-Z]{1,5})(?=\s|$|[^a-zA-z])", wsb_df["Post"][i])
-    tickerFound = ""
-    for word in temp:
-        for negword in negative:
-            if negword in wsb_df["Post"][i].lower():
-                wsb_df["Sentiment Score"][i] += -5
-        for posword in positive:
-            if posword in wsb_df["Post"][i].lower():
-                wsb_df["Sentiment Score"][i] += 5
-        if word in black_list:
-            temp.remove(word)
-            #print('Removing ' + word)
-        else:
-            ticker = word
-            tickerObj = yf.Ticker(ticker)
-            try:
-                if tickerObj.info['symbol'] == ticker:
-                    print("Matching ticker found for " + ticker)
-                  if ticker in dict_freq:
-                     dict_freq[ticker] +=1
-                  else:
-                     dict_freq[ticker] = 1
-                  tickers.add(ticker)
-                  if tickerFound !=  "":
-                     tickerFound += ","
-                     tickerFound += ticker
-            except:
-                print("No such ticker for " + ticker)
-                continue
-            
-    wsb_df["Ticker"][i] = tickerFound
+   temp = re.findall("(?:(?<=\A)|(?<=\s)|(?<=[$]))([A-Z]{1,5})(?=\s|$|[^a-zA-z])", wsb_df["Post"][i])
+   tickerFound = ""
+   for word in temp:
+      for negword in negative:
+         if negword in wsb_df["Post"][i].lower():
+            wsb_df["Sentiment Score"][i] += -5
+      for posword in positive:
+         if posword in wsb_df["Post"][i].lower():
+            wsb_df["Sentiment Score"][i] += 5
+      if word in black_list:
+         temp.remove(word)
+         #print('Removing ' + word)
+      else:
+         ticker = word
+         tickerObj = yf.Ticker(ticker)
+         try:
+            if tickerObj.info['symbol'] == ticker:
+               print("Matching ticker found for " + ticker)
+               if ticker in dict_freq.Name.values:
+                  dict_freq.loc[(dict_freq.Name == ticker), 'Frequency'] =  dict_freq.loc[(dict_freq.Name == ticker), 'Frequency'] + 1
+               else:
+                  dict_freq = dict_freq.append( pd.DataFrame({"Name" : [ticker], "Frequency" : [1]}))
+               tickers.add(ticker)
+               if tickerFound !=  "":
+                  tickerFound += ","
+                  tickerFound += ticker
+         except:
+            print("No such ticker for " + ticker)
+            continue  
+   wsb_df["Ticker"][i] = tickerFound
     
 
 # Get stock Adjusted close
 start = datetime.datetime.today()-datetime.timedelta(100)
 end =  datetime.datetime.today()
 cl_price = pd.DataFrame()
+
+# Print Bar Chart(Frequency)
+dict_freq = dict_freq[dict_freq.Frequency > 1]
+dict_freq.sort_values(by='Frequency', ascending =False).plot.bar(x="Name", y= "Frequency")
+plt.show()
+
 
 for ticker in tickers:
     cl_price[ticker] = yf.download(ticker, start, end )["Adj Close"]
