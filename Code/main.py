@@ -153,7 +153,10 @@ cl_price = pd.DataFrame()
 
 # Print Bar Chart(Frequency)
 dict_freq = dict_freq[dict_freq.Frequency > 1]
-dict_freq.sort_values(by='Frequency', ascending =False).plot.bar(x="Name", y= "Frequency")
+ax = dict_freq.sort_values(by='Frequency', ascending =False).plot.bar(x="Name", y= "Frequency", rot=0)
+ax.set_title("Frequency Table of WSB")
+ax.set_xlabel("Stock Code")
+ax.set_ylabel("Frequency")
 plt.show()
 
 
