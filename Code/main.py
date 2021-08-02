@@ -20,7 +20,9 @@ import nltk
 import matplotlib.pyplot as plt
 import re
 import yfinance as yf
+import os
 
+directory = os.getcwd()
 
 id_ =  
 secret = 
@@ -78,9 +80,8 @@ for submission in validSubmissions:
     i+=1
     wsb_df = wsb_df.append(appendDF , ignore_index = True)
 
-print("Outputing to csv...")
-#wsb_df.to_csv('output.csv', index = False) 
-print("Output to csv completed.")
+#print("Outputing to csv...")
+#print("Output to csv completed.")
 
 #Vader Sentiment Analysis
 
@@ -149,7 +150,7 @@ for i in range(0, len(wsb_df)):
             continue  
       wsb_df["Ticker"][i] = tickerFound
       
-
+wsb_df.to_csv(directory+r'\rawWSB.csv', index = False) 
 
 # Get stock Adjusted close
 start = datetime.datetime.today()-datetime.timedelta(100)
