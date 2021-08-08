@@ -24,4 +24,4 @@ The program removes words that are blacklisted such as 'APE', 'USA', 'CEO' and m
 Based on the output, it can be seen that $AMD was the most frequently mentioned tickers on the 1st - 2nd August 2021.
 
 Plotting the stock closing price for the past 7 days, 
-![alt text](https://github.com/[calvenjs]/[Wallstreebets-Sentiment-Analysis]/blob/[Images]/AMD stock price.jpg?raw=true)
+![math performance](https://github.com/calvenjs/Wallstreebets-Sentiment-Anylsis/blob/Image/AMD%20Stock%20Price.PNG)
