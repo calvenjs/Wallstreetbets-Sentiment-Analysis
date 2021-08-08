@@ -21,4 +21,4 @@ The program removes words that are blacklisted such as 'APE', 'USA', 'CEO' and m
     
 
 ## Conclusion
-Based on the output, it can be seen that $AMD and $WISH was the most frequently mentioned tickers on the 1st - 2nd August 2021.
+Based on the output, it can be seen that $AMD and $WISH were the most frequently mentioned tickers on the 1st - 2nd August 2021.
