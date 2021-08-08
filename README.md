@@ -8,7 +8,7 @@ Overall, this project focuses on getting tickers that are most mentioned and spe
 2. Open the main.py file and edit the id and secret.
 3. Run the script
 
-##Output
+## Output
 1. The raw dataset
 ![image](https://user-images.githubusercontent.com/23024496/127808913-0dc06314-e942-446b-b37b-8ffdbc6e592e.png)
 
