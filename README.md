@@ -3,7 +3,7 @@
 Utilizing Python and Reddit PRAW API to scrape r/wallstreetbets over a 24h period, and perform sentiment analysis.
 Overall, this project focuses on getting tickers that are most mentioned and speculated in the subreddit, the stocks' sentiments will complement the results.
 
-On top of vader sentiment, the analysis uses a self-defined metric on derive the sentiment score on each ticker mentioned. It contains a list of positive words commonly used on tickers that the author has high conviction on e.g. moon, yolo, squeeze while a list of negative words e.g. mistake, out.
+The program removes words that are blacklisted such as 'APE', 'USA', 'CEO' and matches the remaining words to tickers found on US exchanges. On top of vader sentiment, the analysis uses a self-defined metric to derive the sentiment score on each ticker mentioned. It contains a list of positive words commonly used on tickers that the author has high conviction on e.g. moon, yolo, squeeze while a list of negative words e.g. mistake, out.
 
 ## Usage
 1. Download the repository
