@@ -9,9 +9,9 @@ Overall, this project focuses on getting tickers that are most mentioned and spe
 3. Run the script
 
 ## Output
-1. The raw dataset
+1. Dataset
 ![image](https://user-images.githubusercontent.com/23024496/127808913-0dc06314-e942-446b-b37b-8ffdbc6e592e.png)
 
-3. Frequency Table 
+2. Frequency Table 
 ![image](https://user-images.githubusercontent.com/23024496/127806940-0ca27d37-62c6-4668-9e37-10986098e294.png)
     
