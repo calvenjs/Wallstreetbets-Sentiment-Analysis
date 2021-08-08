@@ -10,7 +10,7 @@ On top of vader sentiment, the analysis uses a self-defined metric on derive the
 2. Open the main.py file and edit the id and secret.
 3. Run the script
 
-## Output
+## Output as of 2nd August 2021
 1. Dataset
 
 ![image](https://user-images.githubusercontent.com/23024496/127808913-0dc06314-e942-446b-b37b-8ffdbc6e592e.png)
@@ -19,3 +19,6 @@ On top of vader sentiment, the analysis uses a self-defined metric on derive the
 
 ![image](https://user-images.githubusercontent.com/23024496/127806940-0ca27d37-62c6-4668-9e37-10986098e294.png)
     
+
+## Conclusion
+Based on the output
