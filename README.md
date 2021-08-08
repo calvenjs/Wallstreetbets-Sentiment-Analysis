@@ -21,4 +21,4 @@ On top of vader sentiment, the analysis uses a self-defined metric on derive the
     
 
 ## Conclusion
-Based on the output
+Based on the output, it can be seen that $AMD and $WISH was the most frequently mentioned tickers on the 1st - 2nd August 2021.
