@@ -20,7 +20,7 @@ The program removes words that are blacklisted such as 'APE', 'USA', 'CEO' and m
 ![image](https://user-images.githubusercontent.com/23024496/127806940-0ca27d37-62c6-4668-9e37-10986098e294.png)
     
 
-## Conclusion
+## Stock Price Analysis
 Based on the output, $AMD was the most frequently mentioned ticker on the 1st - 2nd August 2021.
 
 Plotting the stock closing price for the past 7 days, it can be seen that AMD is on an uptrend and closed higher for that week. 
